@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.webappdevelopment.service.UserService;
+import com.webappdevelopment.service.impl.AuthenticationFilter;
 
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter {
@@ -34,8 +35,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	 */
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.csrf().disable().authorizeRequests().antMatchers(HttpMethod.POST, "/users").permitAll()
-				.anyRequest().authenticated();
+		httpSecurity.csrf().disable().authorizeRequests().antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL)
+				.permitAll().anyRequest().authenticated().and()
+				.addFilter(new AuthenticationFilter(authenticationManager()));
 
 	}
 
